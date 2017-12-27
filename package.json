@@ -32,10 +32,13 @@
     "twitter": "maybekatz"
   },
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "uuid": "^3.1.0"
+  },
   "devDependencies": {
     "nyc": "^10.3.2",
-    "standard": "^9.0.2",
+    "require-inject": "^1.4.2",
+    "standard": "^10.0.3",
     "standard-version": "^4.1.0",
     "tap": "^10.3.3",
     "weallbehave": "^1.2.0",
