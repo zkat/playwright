@@ -56,12 +56,12 @@ test('can receive messages', t => {
   })
   const msgs = []
   actor.on('message', m => msgs.push(m))
-  actor.send('hello')
+  actor._send('hello')
   const ret = actor.run()
-  actor.send('world')
-  actor.send(2)
-  actor.send(3)
-  actor.send(1)
+  actor._send('world')
+  actor._send(2)
+  actor._send(3)
+  actor._send(1)
   return ret.then(() => {
     t.deepEqual(msgs, ['hello', 'world', 2, 3, 1], 'can hook up a listener')
     const q = actor._msgs
@@ -79,10 +79,10 @@ test('rejects non-JSON messages', t => {
   const circ = {}
   circ.circ = circ
   t.throws(() => {
-    actor.send(circ)
+    actor._send(circ)
   }, /JSON/i, 'throws if a non-JSON-serializable object is passed')
   const buf = Buffer.from([])
-  actor.send(buf)
+  actor._send(buf)
   return actor.run().then(() => {
     t.equal(actor._msg, buf, 'buffers special-cased and preserve identity')
   })
