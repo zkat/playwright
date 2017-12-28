@@ -55,7 +55,10 @@ test('rejects non-JSON messages', t => {
   circ.circ = circ
   t.throws(() => {
     box.send(circ)
-  }, /JSON/i, 'throws if a non-JSON-serializable object is passed')
+  }, /JSON/i, 'throws if a circular object is passed')
+  t.throws(() => {
+    box.send(() => 1)
+  }, /JSON/i, 'throws if a function is passed in')
   const buf = Buffer.from([])
   box.send(buf)
   return box.recv().then(msg => {
@@ -73,20 +76,27 @@ test('flushing messages', t => {
 })
 
 test('closing mailbox', t => {
-  const box = new Mailbox()
+  let box = new Mailbox()
   function recvFail () {
     return box.recv().then(
       () => { throw new Error('should not have succeeded') },
       err => err
     )
   }
-  const waiting = [recvFail(), recvFail()]
+  const waiting = [recvFail()]
+  box.close()
+  box = new Mailbox()
+  waiting.push(recvFail())
   box.close(new Error('boy bye'))
   waiting.push(recvFail())
   t.throws(() => box.send('hi'), /closed/i, 'box.send() throws when closed')
   return Promise.all(waiting)
   .then(errors => errors.map(x => x.message))
   .then(msgs =>
-    t.deepEqual(msgs, ['boy bye', 'boy bye', 'mailbox closed'])
+    t.deepEqual(
+      msgs,
+      ['mailbox closed', 'boy bye', 'mailbox closed'],
+      'pending receivers notified appropriately'
+    )
   )
 })
