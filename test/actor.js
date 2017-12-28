@@ -55,15 +55,15 @@ test('can receive messages', t => {
     `
   })
   const msgs = []
-  actor.on('message', m => msgs.push(m))
   actor._send('hello')
+  actor.on('message', m => msgs.push(m))
   const ret = actor.run()
   actor._send('world')
   actor._send(2)
   actor._send(3)
   actor._send(1)
   return ret.then(() => {
-    t.deepEqual(msgs, ['hello', 'world', 2, 3, 1], 'can hook up a listener')
+    t.deepEqual(msgs, ['world', 2, 3, 1], 'can hook up a listener')
     const q = actor._msgs
     t.equal(q[0], 'hello', 'accepts messages before .run() and saves them')
     t.equal(q[1], 'world', 'receives message on post-.run() send')
