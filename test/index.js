@@ -6,10 +6,13 @@ const Playwright = require('../index.js')
 
 test('it works', t => {
   return (new Playwright()).start()
-  .then(p => p.stop())
+  .then(
+    p => p.ping()
+    .then(() => p.stop())
+  )
 })
 
-test('spawning and two-way comms with actors works', t => {
+test('spawning and two-way comms with actors works', {skip: true}, t => {
   return (new Playwright()).start()
   .then(p =>
     p.run(() => process.receive(), 'hello')
