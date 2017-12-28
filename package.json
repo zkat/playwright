@@ -37,11 +37,11 @@
     "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "nyc": "^10.3.2",
+    "nyc": "^11.4.1",
     "require-inject": "^1.4.2",
     "standard": "^10.0.3",
     "standard-version": "^4.1.0",
-    "tap": "^10.3.3",
+    "tap": "^11.0.1",
     "weallbehave": "^1.2.0",
     "weallcontribute": "^1.0.8"
   },
